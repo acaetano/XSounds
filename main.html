@@ -8,6 +8,7 @@
         function fct_btplay(){
             if (lista_reproducao[ponteiro]) {
                 alert(lista_reproducao[ponteiro].name);
+                transforma_som(prepara_som(),lista_reproducao[ponteiro].slice())
             } else {
                 alert('Fim da lista de reprodu\u00e7\u00e3o');
                 --ponteiro;
@@ -21,16 +22,19 @@
             document.getElementById('nome_arquivo').innerHTML = document.getElementById('abrir_arquivo').value;
         }
         function prepara_som(){
-            var contexto_som = new webkitAudioContext(); // tipo utilizado pelo Chrome
+            var contexto_som = new AudioContext(); // tipo utilizado pelo Chrome
             return contexto_som;
         }
         function transforma_som(contexto_som, bytes_som){
             // cria origem do som
             origem_som = contexto_som.createBufferSource();
             // lê o arquivo de forma crua mesmo
-            buffer_som = contexto_som.createBuffer(bytes_som,true);
-            // coloca os dados do buffer no objeto
-            origem_som.buffer = buffer_som;
+            contexto_som.decodedAudioData(bytes_som, function seSucesso(decodedBuffer){
+                    alert('Funfou maluco!');
+                    }, function seErro(){
+                        alert('Deu Ruim no decode!');
+                    });
+
             // conecta a origem (bytes) ao destino (caixa de som)
             origem_som.connect(contexto_som.destination);
             origem_som.start(0);
@@ -52,7 +56,6 @@
 
                 lista = lista.concat('</ul>');
                 document.getElementById('box_lista_reproducao').innerHTML = lista;
-                transforma_som(prepara_som(),)
 
             });
         });
@@ -69,6 +72,7 @@
 </div>
 <div id="tocando">
     <span>Tocando:</span><span id="nome_arquivo"></span>
+    <div> </div>
 </div>
 <div id="box_lista_reproducao">
 </div>
