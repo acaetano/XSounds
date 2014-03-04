@@ -4,45 +4,74 @@
 
 var ponteiro = 0;
 var lista_reproducao;
+var lista_reproducao_blobs = new Array();
+//var fs = new FileSystem;
+//var tamanho_fs = 100*1024*1024;
+
+/*
+function cospeErro(erro) {
+    var msg = '';
+
+    switch (erro.code) {
+        case FileError.QUOTA_EXCEEDED_ERR:
+            msg = 'QUOTA_EXCEEDED_ERR';
+            break;
+        case FileError.NOT_FOUND_ERR:
+            msg = 'NOT_FOUND_ERR';
+            break;
+        case FileError.SECURITY_ERR:
+            msg = 'SECURITY_ERR';
+            break;
+        case FileError.INVALID_MODIFICATION_ERR:
+            msg = 'INVALID_MODIFICATION_ERR';
+            break;
+        case FileError.INVALID_STATE_ERR:
+            msg = 'INVALID_STATE_ERR';
+            break;
+        default:
+            msg = 'Erro Desconhecido';
+            break;
+    };
+    console.log('Erro: ' + msg);
+};
+*/
 
 function fct_btplay() {
 
     if (lista_reproducao[ponteiro]) {
-        alert(lista_reproducao[ponteiro].name);
-        transforma_som(prepara_som(),lista_reproducao[ponteiro].slice())
-    } else {
-        alert('Fim da lista de reprodu\u00e7\u00e3o');
-        --ponteiro;
-    }
+        document.getElementById('nome_arquivo').innerHTML = (lista_reproducao[ponteiro].name);
 
+        cria_objeto_audio(ponteiro)
+
+    } else {
+        // alert('Fim da lista de reprodu\u00e7\u00e3o');
+        ponteiro = 0;
+        fct_btplay();
+    }
 }
+
 function fct_btnext() {
     ++ponteiro;
     fct_btplay();
 }
 
-function chama_myinput(){
-    document.getElementById('nome_arquivo').innerHTML = document.getElementById('abrir_arquivo').value;
-}
+function cria_objeto_audio(indicador){
+    if (lista_reproducao_blobs[indicador]) {             // verifica se existe um endereco para o blob
+        var musica = document.createElement('audio');    // cria um elemento "audio"
+        musica.src = lista_reproducao_blobs[indicador];  // informa o endereco do blob
+        musica.id = "player";                           // identifica o elemento
+        musica.controls = true;                         // define o parâmetro "controls" do elemento
+        musica.autoplay = true;                         // define o parâmetro "autoplay" do elemento
 
-function prepara_som(){
-    var contexto_som = new AudioContext(); // tipo utilizado pelo Chrome
-    return contexto_som;
-}
+        var div_audio = document.getElementById('box_controles');
+        while (div_audio.hasChildNodes()) {                  // remove todos os elementos filhos
+            div_audio.removeChild(div_audio.lastChild);
+        } //while
 
-function transforma_som(contexto_som, bytes_som){
-    // cria origem do som
-    origem_som = contexto_som.createBufferSource();
-    // lê o arquivo de forma crua mesmo
-    contexto_som.decodedAudioData(bytes_som, function seSucesso(decodedBuffer){
-        alert('Funfou maluco!');
-    }, function seErro(){
-        alert('Deu Ruim no decode!');
-    });
+        div_audio.appendChild(musica);
+        document.getElementById('player').play();
 
-    // conecta a origem (bytes) ao destino (caixa de som)
-    origem_som.connect(contexto_som.destination);
-    origem_som.start(0);
+    }
 }
 
 document.addEventListener("DOMContentLoaded", function(){  //substituto do jquery "$(document).ready"
@@ -56,8 +85,12 @@ document.addEventListener("DOMContentLoaded", function(){  //substituto do jquer
         var len = lista_reproducao.length;
         var lista = '<ul>';
 
+
+
         for(; i<len; i++){
             lista = lista.concat('<li>',lista_reproducao[i].name,'</li>');
+            var getBlobURL = window.webkitURL && webkitURL.createObjectURL.bind(webkitURL);
+            lista_reproducao_blobs[i] = getBlobURL(lista_reproducao[i]);
         };
 
         lista = lista.concat('</ul>');
@@ -70,7 +103,8 @@ document.addEventListener("DOMContentLoaded", function(){  //substituto do jquer
 /**
  * Check if the navigator supports Audio
  */
-function testNavigator() {
+/*
+ function testNavigator() {
     var context;
     if (typeof AudioContext !== "undefined") {
         context = new AudioContext();
@@ -80,4 +114,4 @@ function testNavigator() {
         alert('AudioContext not supported. :(');
         //throw new Error('AudioContext not supported. :(');
     }
-}
+}  */
