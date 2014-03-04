@@ -5,36 +5,6 @@
 var ponteiro = 0;
 var lista_reproducao;
 var lista_reproducao_blobs = new Array();
-//var fs = new FileSystem;
-//var tamanho_fs = 100*1024*1024;
-
-/*
-function cospeErro(erro) {
-    var msg = '';
-
-    switch (erro.code) {
-        case FileError.QUOTA_EXCEEDED_ERR:
-            msg = 'QUOTA_EXCEEDED_ERR';
-            break;
-        case FileError.NOT_FOUND_ERR:
-            msg = 'NOT_FOUND_ERR';
-            break;
-        case FileError.SECURITY_ERR:
-            msg = 'SECURITY_ERR';
-            break;
-        case FileError.INVALID_MODIFICATION_ERR:
-            msg = 'INVALID_MODIFICATION_ERR';
-            break;
-        case FileError.INVALID_STATE_ERR:
-            msg = 'INVALID_STATE_ERR';
-            break;
-        default:
-            msg = 'Erro Desconhecido';
-            break;
-    };
-    console.log('Erro: ' + msg);
-};
-*/
 
 function fct_btplay() {
 
