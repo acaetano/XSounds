@@ -15,16 +15,20 @@ function fct_btplay() {
             if (lista_reproducao[ponteiro])  //se a lista ainda não acabou
             {
                 document.getElementById('nome_arquivo').innerHTML = (lista_reproducao[ponteiro].name);
+                toggle_play();
                 document.getElementById('player').play();
             } else  //se a lista chegou ao fim, volte ao início
             {
                 // alert('Fim da lista de reprodu\u00e7\u00e3o');
                 ponteiro = 0;
                 document.getElementById('nome_arquivo').innerHTML = (lista_reproducao[ponteiro].name);
+                document.getElementById('btplay').value = 'teste';
+                //toggle_play();
                 document.getElementById('player').play();
             } //else
         } else
         {
+            toggle_play();
             document.getElementById('player').pause();
         } //else
     } else
@@ -67,6 +71,17 @@ function fct_btprev() {
     } else
     {
         alert("Primeiro selecione os arquivos a tocar!")
+    }
+}
+
+function toggle_play() {
+    var botao = document.getElementById('btplay');
+    switch(botao.innerText){
+        case 'Play':
+            botao.innerText = 'Pause';
+            break;
+        default :
+            botao.innerText = 'Play';
     }
 }
 
